@@ -152,19 +152,19 @@ export function PlayerProvider({ initialMainUrl, stickyBottom = true, children }
       {/* contenu de page (liste de pistes avec boutons Play/🎧) */}
       {children}
 
-      {/* lecteur principal (unique) */}
-      <div className={`${stickyBottom ? "fixed bottom-0 left-0 right-0" : ""} bg-white border-t`}>
+        {/* lecteur principal (unique) */}
+      <div className={`${stickyBottom ? "fixed bottom-0 left-0 right-0 z-50" : ""} bg-white border-t shadow-sm`}>
         <div className="max-w-4xl mx-auto px-4 py-3">
           <iframe
             ref={iframeRef}
             title="SoundCloud Main Player"
             width="100%"
-            height="120"
+            height="166"
             allow="autoplay"
             scrolling="no"
             frameBorder="no"
-            className="rounded-lg w-full"
-            src="https://w.soundcloud.com/player/?url=&auto_play=false&show_teaser=false"
+            className="rounded-lg w-full bg-white"
+            src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(initialMainUrl)}&auto_play=false&show_teaser=false`}
           />
         </div>
       </div>

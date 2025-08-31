@@ -1,6 +1,10 @@
 import { useState } from "react";
 import DualPlayerOptionA from "./DualPlayerOptionA";
 
+// src/App.tsx
+import LandingPage from "./LandingPage";
+export default function App() { return <LandingPage />; }
+
 export default function App() {
   // Choix de la piste à pré-écouter (mock)
   const [cueUrl, setCueUrl] = useState<string | undefined>("/mock/cue-a.mp3");

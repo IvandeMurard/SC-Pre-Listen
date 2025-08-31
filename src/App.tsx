@@ -3,7 +3,7 @@ import { PlayerProvider } from "./PlayerProvider";
 import TrackRow from "./TrackRow";
 
 export default function App() {
-  const mainOnLoad = "https://soundcloud.com/artist-a/track-a";
+  const mainOnLoad = "https://soundcloud.com/odesza/line-of-sight"; // exemple public
 
   const tracks = [
     {

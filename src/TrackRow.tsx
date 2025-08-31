@@ -15,6 +15,7 @@ function formatTime(sec?: number) {
 
 export default function TrackRow(props: Props) {
   const player = usePlayer();
+
   const onPlay = () => player.loadAndPlay(props.scUrl);
 
   const onCue = async () => {
@@ -25,54 +26,56 @@ export default function TrackRow(props: Props) {
     }
   };
 
+  const onStopCue = () => {
+    player.stopPreview();
+  };
+
   return (
-    <div className="group flex items-center gap-3 w-full px-3 py-2 rounded-lg border hover:bg-gray-50 transition">
-      {/* Play button à gauche (rond noir) */}
-      <button
-        onClick={onPlay}
-        className="shrink-0 w-9 h-9 rounded-full bg-black text-white grid place-items-center hover:scale-105 transition"
-        title="Lire dans le player"
-        aria-label="Play"
-      >
-        ▶
-      </button>
-
-      {/* Cover */}
-      <img
-        src={props.cover || "/art/placeholder.jpg"}
-        alt=""
-        className="shrink-0 w-12 h-12 rounded object-cover bg-gray-200"
-      />
-
-      {/* Titre + artiste + waveform 'fake' */}
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
+    <div className="flex items-center justify-between gap-3 py-3 px-3 rounded-lg border hover:bg-gray-50 transition">
+      {/* Left: cover + info */}
+      <div className="flex items-center gap-3 min-w-0">
+        <img
+          src={props.cover || "/art/placeholder.jpg"}
+          alt=""
+          className="shrink-0 w-12 h-12 rounded object-cover bg-gray-200"
+        />
+        <div className="min-w-0">
           <div className="truncate font-medium">{props.title}</div>
-          {props.artist && <div className="truncate text-xs opacity-60">— {props.artist}</div>}
-        </div>
-
-        {/* Waveform 'fake' */}
-        <div className="mt-1 h-3 flex gap-0.5 opacity-80">
-          {/* 40 barres fines de hauteur variable pour simuler la waveform */}
-          {Array.from({ length: 40 }).map((_, i) => {
-            const h = 3 + ((i * 73) % 12); // pseudo-aléatoire stable
-            return <div key={i} style={{ height: h }} className="w-1 bg-gray-300 rounded-sm" />;
-          })}
+          {props.artist && <div className="truncate text-xs opacity-60">{props.artist}</div>}
+          {player.isCueing && (
+            <div className="text-xs text-amber-600 font-semibold mt-1">🎧 Cueing in headphones…</div>
+          )}
         </div>
       </div>
 
-      {/* Durée */}
-      <div className="text-xs tabular-nums text-gray-500">{formatTime(props.durationSec)}</div>
+      {/* Right: controls */}
+      <div className="flex items-center gap-2 shrink-0">
+        {player.isCueing ? (
+          <button
+            onClick={onStopCue}
+            className="px-3 py-2 rounded bg-amber-600 text-white hover:bg-amber-700"
+            title="Stop cue"
+          >
+            Stop 🎧
+          </button>
+        ) : (
+          <button
+            onClick={onCue}
+            className="px-3 py-2 rounded border hover:bg-white transition"
+            title="Cue in headphones"
+          >
+            🎧
+          </button>
+        )}
 
-      {/* Bouton 🎧 à droite (discret) */}
-      <button
-        onClick={onCue}
-        className="shrink-0 px-3 py-2 rounded border hover:bg-white transition"
-        title="Pré-écouter au casque"
-        aria-label="Pré-écouter"
-      >
-        🎧
-      </button>
+        <button
+          onClick={onPlay}
+          className="px-3 py-2 rounded bg-black text-white hover:bg-gray-800 transition"
+          title="Play in main player"
+        >
+          ▶
+        </button>
+      </div>
     </div>
   );
 }

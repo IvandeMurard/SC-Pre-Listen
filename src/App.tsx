@@ -1,75 +1,60 @@
-import { useState } from "react";
-import DualPlayerOptionA from "./DualPlayerOptionA";
-
 // src/App.tsx
-import LandingPage from "./LandingPage";
-export default function App() { return <LandingPage />; }
+import { PlayerProvider } from "./PlayerProvider";
+import TrackRow from "./TrackRow";
 
 export default function App() {
-  // Choix de la piste à pré-écouter (mock)
-  const [cueUrl, setCueUrl] = useState<string | undefined>("/mock/cue-a.mp3");
+  const mainOnLoad = "https://soundcloud.com/artist-a/track-a";
 
-  // Remplace par une vraie URL SoundCloud publique (ex: https://soundcloud.com/artist/track)
-  const MAIN_SC_URL = "https://soundcloud.com/artist-a/track-a";
+  const tracks = [
+    {
+      title: "Track A (main)",
+      artist: "Artist A",
+      scUrl: "https://soundcloud.com/artist-a/track-a",
+      cueDirectUrl: "/mock/cue-a.mp3",
+      cover: "/art/a.jpg",
+      durationSec: 208,
+    },
+    {
+      title: "Track B",
+      artist: "Artist B",
+      scUrl: "https://soundcloud.com/artist-b/track-b",
+      cueDirectUrl: "/mock/cue-b.mp3",
+      cover: "/art/b.jpg",
+      durationSec: 194,
+    },
+    {
+      title: "Track C",
+      artist: "Artist C",
+      scUrl: "https://soundcloud.com/artist-c/track-c",
+      cueDirectUrl: "/mock/cue-c.mp3",
+      cover: "/art/c.jpg",
+      durationSec: 215,
+    },
+  ];
 
   return (
-    <main className="min-h-screen text-[#333]">
-      <header className="px-6 py-10 border-b bg-white">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold tracking-tight">
-            SoundCloud — Cue Preview <span className="align-super text-sm">🎧</span>
-          </h1>
-          <p className="text-sm mt-2 opacity-80">
-            Pré-écoutez au <strong>casque</strong> une piste candidate pendant que la piste principale joue dans le
-            widget SoundCloud (ducking automatique).
+    <main className="min-h-screen bg-white text-[#333] pb-[160px]">
+      <header className="px-6 py-10 border-b">
+        <div className="max-w-4xl mx-auto space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight">Playlist — Play & Cue (style SoundCloud)</h1>
+          <p className="text-sm opacity-80">
+            Play ⟶ lecture normale dans le player. 🎧 ⟶ pré-écoute au casque (ducking automatique).
           </p>
         </div>
       </header>
 
-      <section className="px-6 py-10">
-        <div className="max-w-3xl mx-auto space-y-8">
-          {/* Player principal + pré-écoute */}
-          <DualPlayerOptionA
-            mainTrackUrl={MAIN_SC_URL}
-            cueDirectUrl={cueUrl}            // ✅ mock MP3 local (routage possible)
-            // Quand tu auras le client_id, tu passeras plutôt:
-            // cueTrackUrl={"https://soundcloud.com/artist-b/track-b"}
-            // scClientId={import.meta.env.VITE_SC_CLIENT_ID}
-          />
-
-          {/* Sélecteur rapide de la piste à pré-écouter */}
-          <div className="space-y-2">
-            <h2 className="font-medium">Choisir la piste à pré-écouter</h2>
-            <div className="flex gap-3 flex-wrap">
-              <button
-                className={`px-3 py-2 rounded border ${cueUrl === "/mock/cue-a.mp3" ? "bg-black text-white" : ""}`}
-                onClick={() => setCueUrl("/mock/cue-a.mp3")}
-              >
-                🎧 Cue A (mock)
-              </button>
-              <button
-                className={`px-3 py-2 rounded border ${cueUrl === "/mock/cue-b.mp3" ? "bg-black text-white" : ""}`}
-                onClick={() => setCueUrl("/mock/cue-b.mp3")}
-              >
-                🎧 Cue B (mock)
-              </button>
-            </div>
-            <p className="text-xs opacity-60">
-              Astuce : lance d’abord la piste principale dans le widget, puis appuie sur “🎧 Pré-écouter”.
-              Test recommandé sur Chrome/Edge desktop. HTTPS requis en ligne (localhost OK).
-            </p>
+      <PlayerProvider initialMainUrl={mainOnLoad} stickyBottom>
+        <section className="px-6 py-8">
+          <div className="max-w-4xl mx-auto grid gap-3">
+            {tracks.map((t, i) => (
+              <TrackRow key={i} {...(t as any)} />
+            ))}
           </div>
-
-          {/* Liste d’exemples d’URLs SoundCloud pour le main (pas obligatoires) */}
-          <div className="space-y-2">
-            <h3 className="font-medium">Exemples d’URLs SoundCloud (main)</h3>
-            <ul className="list-disc ml-6 text-sm opacity-80">
-              <li>https://soundcloud.com/artist-a/track-a</li>
-              <li>https://soundcloud.com/artist-b/track-b</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+          <p className="max-w-4xl mx-auto mt-4 text-xs opacity-60">
+            Chrome/Edge desktop recommandé. HTTPS requis en ligne pour le routage. Safari/iOS : pas de sortie séparée.
+          </p>
+        </section>
+      </PlayerProvider>
     </main>
   );
 }

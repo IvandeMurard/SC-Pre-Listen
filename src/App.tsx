@@ -5,7 +5,37 @@ import TrackRow from "./TrackRow";
 
 export default function App() {
   const mainOnLoad = "https://soundcloud.com/odesza/line-of-sight";
-  const tracks = [ /* ...tes pistes (inchangé) ... */ ];
+ // src/App.tsx (extrait)
+const tracks = [
+  {
+    title: "Track A (main)",
+    artist: "ODESZA",
+    scUrl: "https://soundcloud.com/odesza/line-of-sight",
+    // ⬇️ remplace le MP3 mock par la vraie URL SoundCloud pour la pré-écoute
+    cueTrackUrl: "https://soundcloud.com/odesza/line-of-sight",
+    scClientId: import.meta.env.VITE_SC_CLIENT_ID!,
+    cover: "/art/a.jpg",
+    durationSec: 208,
+  },
+  {
+    title: "Track B",
+    artist: "ODESZA",
+    scUrl: "https://soundcloud.com/odesza/loyal",
+    cueTrackUrl: "https://soundcloud.com/odesza/loyal",
+    scClientId: import.meta.env.VITE_SC_CLIENT_ID!,
+    cover: "/art/b.jpg",
+    durationSec: 194,
+  },
+  {
+    title: "Track C",
+    artist: "ODESZA",
+    scUrl: "https://soundcloud.com/odesza/memories-that-you-call",
+    cueTrackUrl: "https://soundcloud.com/odesza/memories-that-you-call",
+    scClientId: import.meta.env.VITE_SC_CLIENT_ID!,
+    cover: "/art/c.jpg",
+    durationSec: 215,
+  },
+];
 
   return (
     <main className="min-h-screen bg-white text-[#e5e5e5] pb-[170px]">
